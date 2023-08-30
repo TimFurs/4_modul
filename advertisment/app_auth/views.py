@@ -31,9 +31,10 @@ def register_view(request):
     if request.method == 'POST': 
         form = CustomUserCreationForm(request.POST, request.FILES) 
         if form.is_valid(): 
-            form.save()
-            url = reverse('main_page')
-            return redirect(url) 
+            user = form.save()
+            user = authenticate(username=user.username, password=request.POST['password1'])
+            login(request, user=user)
+            return redirect(reverse('profile')) 
     else:
         form = CustomUserCreationForm() 
     context = {
